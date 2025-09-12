@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Perfume Samples</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #fdf0fb; color: #333; padding: 20px; }
+    h1 { text-align: center; color: #c23bee; }
+    input[type="text"] { width: 100%; padding: 10px; margin: 10px 0 20px 0; border: 2px solid #c23bee; border-radius: 5px; }
+    .sample-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+    .sample { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .sample a { display: inline-block; margin-top: 10px; color: #fff; background: #c23bee; padding: 8px 12px; border-radius: 4px; text-decoration: none; }
+    .sample a:hover { background: #a01ccc; }
+</style>
+</head>
+<body>
+<h1>Free Perfume Sample Finder</h1>
+<input type="text" id="searchBox" placeholder="Search for a perfume brand...">
+<div class="sample-list" id="sampleList"></div>
+
+<script>
+const samples = [
+    {name: "Dior Sauvage", link: "https://www.dior.com/en_us/fragrance-mens/dior-sauvage-free-sample"},
+    {name: "Chanel No.5", link: "https://www.chanel.com/us/fragrance-no5-sample-request"},
+    {name: "YSL Libre", link: "https://www.yslbeautyus.com/fragrance/libre-sample-request"},
+    {name: "Versace Eros", link: "https://www.versace.com/us/fragrance/eros-sample-request"},
+    {name: "Gucci Bloom", link: "https://www.gucci.com/us/en/st/capsule/fragrance/gucci-bloom-sample-request"}
+];
+
+const sampleList = document.getElementById("sampleList");
+const searchBox = document.getElementById("searchBox");
+
+function displaySamples(filtered) {
+    sampleList.innerHTML = "";
+    if(filtered.length === 0){
+        sampleList.innerHTML = "<p>No samples found 😢</p>";
+    } else {
+        filtered.forEach(sample => {
+            const div = document.createElement("div");
+            div.className = "sample";
+            div.innerHTML = `<h3>${sample.name}</h3><a href="${sample.link}" target="_blank">Get Sample</a>`;
+            sampleList.appendChild(div);
+        });
+    }
+}
+
+searchBox.addEventListener("input", () => {
+    const query = searchBox.value.toLowerCase();
+    const filtered = samples.filter(s => s.name.toLowerCase().includes(query));
+    displaySamples(filtered);
+});
+
+// Initial display
+displaySamples(samples);
+</script>
+</body>
+</html>
