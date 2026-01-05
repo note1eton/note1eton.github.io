@@ -15,19 +15,27 @@
       font-family: sans-serif;
       text-align: center;
     }
+    .logo-text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     img {
-      max-width: 90%;
-      max-height: 60%;
+      max-width: 95%;
+      max-height: 70%;
     }
     .date {
-      margin-top: 15px;
-      font-size: 18vw; /* scales with screen width */
+      margin-top: 10px;
+      font-size: 8vw; /* bigger but stays on one line */
+      white-space: nowrap;
       color: black;
     }
   </style>
 </head>
 <body>
-  <img src="IMG_9153.jpeg" alt="Logo">
-  <div class="date">1 FEB 2026</div>
+  <div class="logo-text-container">
+    <img src="IMG_9153.jpeg" alt="Logo">
+    <div class="date">1 FEB 2026</div>
+  </div>
 </body>
 </html>
