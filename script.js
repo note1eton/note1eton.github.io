@@ -1,46 +1,47 @@
-const sections = document.querySelectorAll('.section');
-const userArea = document.getElementById('userArea');
-
-function showSection(id) {
-  sections.forEach(sec => sec.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1020;
+  color: #e5e7eb;
 }
 
-function updateUserUI() {
-  const user = localStorage.getItem('user');
-  if (user) {
-    userArea.innerHTML = `👤 ${user} <button onclick="logout()">Log out</button>`;
-  } else {
-    userArea.innerHTML = `<button onclick="showSection('auth')">Sign up / Log in</button>`;
-  }
+header {
+  background: #020617;
+  padding: 1rem;
 }
 
-function signup() {
-  const u = username.value;
-  const p = password.value;
-  if (!u || !p) return alert('Fill both fields');
-  localStorage.setItem(`user_${u}`, p);
-  localStorage.setItem('user', u);
-  updateUserUI();
-  showSection('home');
+header h1 {
+  margin: 0 0 0.5rem 0;
 }
 
-function login() {
-  const u = username.value;
-  const p = password.value;
-  if (localStorage.getItem(`user_${u}`) === p) {
-    localStorage.setItem('user', u);
-    updateUserUI();
-    showSection('home');
-  } else {
-    alert('Wrong login');
-  }
+nav button {
+  margin-right: 0.4rem;
+  background: #1e293b;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
 }
 
-function logout() {
-  localStorage.removeItem('user');
-  updateUserUI();
+nav button:hover {
+  background: #334155;
 }
 
-updateUserUI();
-showSection('home');
+.section {
+  padding: 1.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+input {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 220px;
+}
+
+#userArea {
+  margin-left: 1rem;
+}
