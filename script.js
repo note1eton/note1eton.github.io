@@ -47,12 +47,12 @@ form.addEventListener("submit", async (event) => {
 
     addMessage(data.reply, "ai");
 
-  } catch (error) {
-    thinking.remove();
-    addMessage(
-      "I couldn't connect right now. Try again in a moment.",
-      "ai"
-    );
-    console.error(error);
-  }
+ } catch (error) {
+  thinking.remove();
+  addMessage(
+    "Connection error: " + error.message,
+    "ai"
+  );
+  console.error(error);
+}
 });
