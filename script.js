@@ -2,14 +2,17 @@ const form = document.getElementById("chat-form");
 const input = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 
+const AI_URL = "https://dawn-scene-64ea.ebennanik.workers.dev/";
+
 function addMessage(text, sender) {
   const message = document.createElement("div");
   message.className = sender;
   message.textContent = text;
   messages.appendChild(message);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const text = input.value.trim();
@@ -18,11 +21,38 @@ form.addEventListener("submit", function (event) {
   addMessage(text, "user");
   input.value = "";
 
-  // Temporary AI personality — we'll connect a real AI later.
-  setTimeout(() => {
+  const thinking = document.createElement("div");
+  thinking.className = "ai";
+  thinking.textContent = "Thinking...";
+  messages.appendChild(thinking);
+
+  try {
+    const response = await fetch(AI_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: text
+      })
+    });
+
+    const data = await response.json();
+
+    thinking.remove();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+
+    addMessage(data.reply, "ai");
+
+  } catch (error) {
+    thinking.remove();
     addMessage(
-      "Oh... hi. I'm still being set up, but I'm listening.",
+      "I couldn't connect right now. Try again in a moment.",
       "ai"
     );
-  }, 500);
+    console.error(error);
+  }
 });
