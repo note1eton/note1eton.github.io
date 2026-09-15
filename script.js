@@ -1,54 +1,46 @@
-const sections = document.querySelectorAll('.section');
-const userArea = document.getElementById('userArea');
+const form = document.getElementById("chat-form");
+const input = document.getElementById("message-input");
+const messages = document.getElementById("messages");
 
-function showSection(id) {
-  sections.forEach(section => section.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+function addMessage(text, sender) {
+  const message = document.createElement("div");
+  message.className = sender;
+  message.textContent = text;
+  messages.appendChild(message);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-function updateUserUI() {
-  const user = localStorage.getItem('user');
-  if (user) {
-    userArea.innerHTML = `👤 ${user} <button onclick="logout()">Logout</button>`;
-  } else {
-    userArea.innerHTML = '';
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  addMessage("Thinking...", "ai");
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: text
+      })
+    });
+
+    const data = await response.json();
+
+    // Remove "Thinking..."
+    messages.lastChild.remove();
+
+    addMessage(data.reply, "ai");
+
+  } catch (error) {
+    messages.lastChild.remove();
+    addMessage("Sorry, something went wrong.", "ai");
   }
-}
-
-function signup() {
-  const u = username.value.trim();
-  const p = password.value.trim();
-
-  if (!u || !p) {
-    alert('Fill in both fields');
-    return;
-  }
-
-  localStorage.setItem('user_' + u, p);
-  localStorage.setItem('user', u);
-
-  updateUserUI();
-  showSection('home');
-}
-
-function login() {
-  const u = username.value.trim();
-  const p = password.value.trim();
-
-  if (localStorage.getItem('user_' + u) === p) {
-    localStorage.setItem('user', u);
-    updateUserUI();
-    showSection('home');
-  } else {
-    alert('Wrong username or password');
-  }
-}
-
-function logout() {
-  localStorage.removeItem('user');
-  updateUserUI();
-  showSection('home');
-}
-
-updateUserUI();
-showSection('home');
+});
