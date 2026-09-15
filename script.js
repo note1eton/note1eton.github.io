@@ -7,10 +7,9 @@ function addMessage(text, sender) {
   message.className = sender;
   message.textContent = text;
   messages.appendChild(message);
-  messages.scrollTop = messages.scrollHeight;
 }
 
-form.addEventListener("submit", async (event) => {
+form.addEventListener("submit", function (event) {
   event.preventDefault();
 
   const text = input.value.trim();
@@ -19,28 +18,11 @@ form.addEventListener("submit", async (event) => {
   addMessage(text, "user");
   input.value = "";
 
-  addMessage("Thinking...", "ai");
-
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text
-      })
-    });
-
-    const data = await response.json();
-
-    // Remove "Thinking..."
-    messages.lastChild.remove();
-
-    addMessage(data.reply, "ai");
-
-  } catch (error) {
-    messages.lastChild.remove();
-    addMessage("Sorry, something went wrong.", "ai");
-  }
+  // Temporary AI personality — we'll connect a real AI later.
+  setTimeout(() => {
+    addMessage(
+      "Oh... hi. I'm still being set up, but I'm listening.",
+      "ai"
+    );
+  }, 500);
 });
