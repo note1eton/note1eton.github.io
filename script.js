@@ -32,27 +32,23 @@ form.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        message: text
-      })
+      body: JSON.stringify({ message: text })
     });
 
-    const data = await response.json();
+    const body = await response.text();
 
     thinking.remove();
 
     if (!response.ok) {
-      throw new Error(data.error || "Request failed");
+      addMessage("Server error " + response.status + ": " + body, "ai");
+      return;
     }
 
-    addMessage(data.reply, "ai");
+    const data = JSON.parse(body);
+    addMessage(data.reply || "The AI returned no reply.", "ai");
 
- } catch (error) {
-  thinking.remove();
-  addMessage(
-    "Connection error: " + error.message,
-    "ai"
-  );
-  console.error(error);
-}
+  } catch (error) {
+    thinking.remove();
+    addMessage("Connection error: " + error.message, "ai");
+  }
 });
